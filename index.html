@@ -167,13 +167,11 @@
       border: 1px solid #fecaca;
     }
 
-    /* Notifikasi Classic untuk Expired */
     .classic-expired {
       background-color: #f5f5f4;
       color: #44403c;
       border: 1px dashed #78716c;
       font-family: 'Courier New', Courier, monospace;
-      letter-spacing: -0.2px;
     }
 
     /* Animations */
@@ -253,16 +251,6 @@
         return;
       }
 
-      // Validasi tambahan jam di JS (Opsional)
-      const now = new Date();
-      const jam = now.getHours();
-
-      // Jika di luar jam 06.00 s/d 06.59 WIB
-      if (jam < 6 || jam >= 7) {
-        showStatus('Maaf kode ini telah expired', 'classic-expired');
-        return;
-      }
-
       showStatus('Memeriksa data...', '');
 
       try {
@@ -280,7 +268,6 @@
           document.getElementById('kode').value = '';
           document.getElementById('pelajaran').selectedIndex = 0;
         } else {
-          // Jika pesan dari Supabase "Maaf kode ini telah expired"
           if (data.message.includes('expired')) {
             showStatus(data.message, 'classic-expired');
           } else {
