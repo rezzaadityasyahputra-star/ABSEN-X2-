@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Absen X-2</title>
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      background-color: #f8fafc;
+      color: #0f172a;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    /* Header Container */
+    .header {
+      width: 100%;
+      max-width: 450px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      margin-bottom: 24px;
+      animation: fadeInDown 0.6s ease;
+    }
+
+    .logo {
+      position: absolute;
+      left: 0;
+      width: 45px;
+      height: 45px;
+      border-radius: 12px;
+      object-fit: cover;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover {
+      transform: scale(1.05);
+    }
+
+    .title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #0f172a;
+      letter-spacing: -0.5px;
+    }
+
+    /* Card Form */
+    .card {
+      background: #ffffff;
+      width: 100%;
+      max-width: 450px;
+      padding: 32px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      border: 1px solid #e2e8f0;
+      animation: fadeInUp 0.6s ease;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #475569;
+      margin-bottom: 8px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: 1.5px solid #cbd5e1;
+      background-color: #ffffff;
+      color: #0f172a;
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    input:focus, select:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+    }
+
+    input[readonly] {
+      background-color: #f1f5f9;
+      color: #64748b;
+      cursor: not-allowed;
+      border-color: #e2e8f0;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+      transition: all 0.2s ease;
+      margin-top: 8px;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    /* Status Message */
+    #status-msg {
+      margin-top: 16px;
+      text-align: center;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border-radius: 8px;
+      padding: 0;
+      transition: all 0.3s ease;
+    }
+
+    .msg-box {
+      padding: 12px;
+      border-radius: 8px;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .success {
+      background-color: #dcfce7;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+    .error {
+      background-color: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
+    /* Notifikasi Classic untuk Expired */
+    .classic-expired {
+      background-color: #f5f5f4;
+      color: #44403c;
+      border: 1px dashed #78716c;
+      font-family: 'Courier New', Courier, monospace;
+      letter-spacing: -0.2px;
+    }
+
+    /* Animations */
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header Section -->
+  <div class="header">
+    <img src="https://via.placeholder.com/150" alt="Logo Kelas" class="logo">
+    <h1 class="title">ABSEN-X2</h1>
+  </div>
+
+  <!-- Form Card Section -->
+  <div class="card">
+    <div class="form-group">
+      <label for="nama">NAMA ASLI :</label>
+      <input type="text" id="nama" placeholder="Masukkan nama lengkap..." required>
+    </div>
+
+    <div class="form-group">
+      <label for="kelas">KELAS :</label>
+      <input type="text" id="kelas" value="X-2" readonly>
+    </div>
+
+    <div class="form-group">
+      <label for="pelajaran">PELAJARAN :</label>
+      <select id="pelajaran" required>
+        <option value="" disabled selected>-- Pilih Mata Pelajaran --</option>
+        <option value="Bahasa Indonesia">Bahasa Indonesia</option>
+        <option value="Geografi">Geografi</option>
+        <option value="Matematika">Matematika</option>
+        <option value="Sejarah">Sejarah</option>
+        <option value="Informatika">Informatika</option>
+        <option value="Bahasa Sunda">Bahasa Sunda</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="kode">KODE ABSEN :</label>
+      <input type="password" id="kode" placeholder="Masukkan kode rahasia..." required>
+    </div>
+
+    <button onclick="prosesAbsen()">ABSEN SEKARANG</button>
+
+    <div id="status-msg"></div>
+  </div>
+
+  <script>
+    // Inisialisasi Supabase
+    const SUPABASE_URL = 'https://atgujhpouptqipcjchlm.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0Z3VqaHBvdXB0cWlwY2pjaGxtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg4NzI0MzQsImV4cCI6MjEwNDQ0ODQzNH0.BsFpKqtj3sdsnHzJttT_2gDAxyul7ljou5FcU8SnUpc';
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    async function prosesAbsen() {
+      const nama = document.getElementById('nama').value.trim();
+      const melek = document.getElementById('pelajaran');
+      const pelajaran = melek.options[melek.selectedIndex]?.value || '';
+      const kode = document.getElementById('kode').value.trim();
+
+      if (!nama || !pelajaran || !kode) {
+        showStatus('Semua kolom wajib diisi!', 'error');
+        return;
+      }
+
+      // Validasi tambahan jam di JS (Opsional)
+      const now = new Date();
+      const jam = now.getHours();
+
+      // Jika di luar jam 06.00 s/d 06.59 WIB
+      if (jam < 6 || jam >= 7) {
+        showStatus('Maaf kode ini telah expired', 'classic-expired');
+        return;
+      }
+
+      showStatus('Memeriksa data...', '');
+
+      try {
+        const { data, error } = await _supabase.rpc('submit_absen', {
+          p_nama: nama,
+          p_kode: kode,
+          p_pelajaran: pelajaran
+        });
+
+        if (error) throw error;
+
+        if (data.success) {
+          showStatus(data.message, 'success');
+          document.getElementById('nama').value = '';
+          document.getElementById('kode').value = '';
+          document.getElementById('pelajaran').selectedIndex = 0;
+        } else {
+          // Jika pesan dari Supabase "Maaf kode ini telah expired"
+          if (data.message.includes('expired')) {
+            showStatus(data.message, 'classic-expired');
+          } else {
+            showStatus(data.message, 'error');
+          }
+        }
+
+      } catch (err) {
+        console.error(err);
+        showStatus('Terjadi kesalahan sistem atau koneksi.', 'error');
+      }
+    }
+
+    function showStatus(text, type) {
+      const statusMsg = document.getElementById('status-msg');
+      if (!type) {
+        statusMsg.innerHTML = text;
+        return;
+      }
+      statusMsg.innerHTML = `<div class="msg-box ${type}">${text}</div>`;
+    }
+  </script>
+</body>
+</html>
